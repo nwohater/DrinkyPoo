@@ -152,6 +152,39 @@ final class AppViewModel {
             .sorted { $0.start < $1.start }
     }
 
+    /// The last 7 calendar days (oldest first) with their logged state, if any.
+    var last7Days: [(date: Date, state: DayState?)] {
+        let cal = Calendar.current
+        let today = cal.startOfDay(for: Date())
+        let lookup = entryLookup
+        return (0..<7).reversed().map { daysAgo in
+            let date = cal.date(byAdding: .day, value: -daysAgo, to: today)!
+            return (date: date, state: lookup[date])
+        }
+    }
+
+    /// Dry + drinking counts for the current calendar month.
+    var currentMonthStats: (dry: Int, drinking: Int) {
+        let month = Calendar.current.component(.month, from: Date())
+        return monthlyBreakdown[month] ?? (dry: 0, drinking: 0)
+    }
+
+    /// Days left in the current month after today.
+    var daysRemainingInMonth: Int {
+        let cal = Calendar.current
+        let now = Date()
+        guard let range = cal.range(of: .day, in: .month, for: now) else { return 0 }
+        return range.count - cal.component(.day, from: now)
+    }
+
+    /// How many more dry days are needed this month to reach the goal, or 0 if already on track.
+    func dryDaysNeededForGoal(goalPercent: Double) -> Int {
+        let cal = Calendar.current
+        guard let range = cal.range(of: .day, in: .month, for: Date()) else { return 0 }
+        let target = Int(ceil(Double(range.count) * goalPercent / 100.0))
+        return max(target - currentMonthStats.dry, 0)
+    }
+
     /// The top 5 longest dry streaks in the current year.
     var topDryStreaks: [Streak] {
         Array(allDryStreaks.prefix(5))

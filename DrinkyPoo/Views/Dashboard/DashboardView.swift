@@ -14,21 +14,20 @@ struct DashboardView: View {
 
     var body: some View {
         ScrollView {
-            VStack(spacing: 20) {
+            VStack(spacing: 14) {
                 // MARK: Header
-                HStack {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Drinky Poo")
-                            .font(.largeTitle.bold())
-                            .foregroundStyle(Color("PrimaryText"))
-                        Text(Date(), format: .dateTime.weekday(.wide).month(.wide).day())
-                            .font(.subheadline)
-                            .foregroundStyle(Color("SecondaryText"))
-                    }
-                    Spacer()
+                VStack(spacing: 0) {
+                    Image("AppLogo")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 120)
+                    Text(Date(), format: .dateTime.weekday(.wide).month(.wide).day())
+                        .font(.subheadline)
+                        .foregroundStyle(Color("SecondaryText"))
                 }
                 .padding(.horizontal)
-                .padding(.top, 8)
+                .padding(.top, 4)
 
                 // MARK: Stat cards
                 HStack(spacing: 12) {
@@ -59,12 +58,18 @@ struct DashboardView: View {
                 )
                 .padding(.horizontal)
 
-                Spacer(minLength: 40)
+                // MARK: Last 7 days
+                last7DaysCard
+                    .padding(.horizontal)
+
+                // MARK: This month
+                thisMonthCard
+                    .padding(.horizontal)
 
                 // MARK: Log button
                 logButton
                     .padding(.horizontal)
-                    .padding(.bottom, 24)
+                    .padding(.bottom, 16)
             }
         }
         .background(Color("AppBackground").ignoresSafeArea())
@@ -90,6 +95,116 @@ struct DashboardView: View {
             .presentationDetents([.height(300)])
             .presentationCornerRadius(20)
         }
+    }
+
+    // MARK: - Last 7 days card
+
+    private var last7DaysCard: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Last 7 Days")
+                .font(.headline)
+                .foregroundStyle(Color("PrimaryText"))
+
+            HStack(spacing: 0) {
+                ForEach(viewModel.last7Days, id: \.date) { day in
+                    VStack(spacing: 6) {
+                        Text(day.date.formatted(.dateTime.weekday(.narrow)))
+                            .font(.caption2)
+                            .foregroundStyle(Color("SecondaryText"))
+                        Circle()
+                            .fill(dotColor(for: day.state))
+                            .frame(width: 28, height: 28)
+                            .overlay {
+                                if Calendar.current.isDateInToday(day.date) {
+                                    Circle().stroke(Color("PrimaryText"), lineWidth: 2)
+                                }
+                            }
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+            }
+        }
+        .padding(16)
+        .background(Color("CardBackground"))
+        .clipShape(RoundedRectangle(cornerRadius: 14))
+    }
+
+    private func dotColor(for state: DayState?) -> Color {
+        switch state {
+        case .dry:      return Color("DryDayColor")
+        case .drinking: return Color("DrinkingDayColor")
+        case .none:     return Color.secondary.opacity(0.2)
+        }
+    }
+
+    // MARK: - This month card
+
+    private var thisMonthCard: some View {
+        let stats   = viewModel.currentMonthStats
+        let total   = stats.dry + stats.drinking
+        let pct     = total > 0 ? Int(Double(stats.dry) / Double(total) * 100) : 0
+        let needed  = viewModel.dryDaysNeededForGoal(goalPercent: goalPercent)
+        let remaining = viewModel.daysRemainingInMonth
+
+        return VStack(alignment: .leading, spacing: 12) {
+            Text(Date().formatted(.dateTime.month(.wide)))
+                .font(.headline)
+                .foregroundStyle(Color("PrimaryText"))
+
+            HStack(spacing: 0) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("\(stats.dry)")
+                        .font(.title2.bold().monospacedDigit())
+                        .foregroundStyle(Color("DryDayColor"))
+                    Text("dry")
+                        .font(.caption)
+                        .foregroundStyle(Color("SecondaryText"))
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("\(stats.drinking)")
+                        .font(.title2.bold().monospacedDigit())
+                        .foregroundStyle(Color("DrinkingDayColor"))
+                    Text("drinking")
+                        .font(.caption)
+                        .foregroundStyle(Color("SecondaryText"))
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+                VStack(alignment: .trailing, spacing: 2) {
+                    Text("\(pct)%")
+                        .font(.title2.bold().monospacedDigit())
+                        .foregroundStyle(Color("PrimaryText"))
+                    Text("dry rate")
+                        .font(.caption)
+                        .foregroundStyle(Color("SecondaryText"))
+                }
+            }
+
+            if total > 0 {
+                if needed == 0 {
+                    Label("On track for goal this month", systemImage: "checkmark.circle.fill")
+                        .font(.caption)
+                        .foregroundStyle(Color("DryDayColor"))
+                } else if remaining == 0 {
+                    Label("Goal not reached this month", systemImage: "xmark.circle.fill")
+                        .font(.caption)
+                        .foregroundStyle(Color("DrinkingDayColor"))
+                } else if needed > remaining {
+                    Label("Goal out of reach — \(needed) needed, \(remaining) days left", systemImage: "xmark.circle.fill")
+                        .font(.caption)
+                        .foregroundStyle(Color("DrinkingDayColor"))
+                } else {
+                    Text("Need \(needed) more dry \(needed == 1 ? "day" : "days") in \(remaining) remaining to hit goal")
+                        .font(.caption)
+                        .foregroundStyle(Color("SecondaryText"))
+                }
+            }
+        }
+        .padding(16)
+        .background(Color("CardBackground"))
+        .clipShape(RoundedRectangle(cornerRadius: 14))
     }
 
     // MARK: - Log button
