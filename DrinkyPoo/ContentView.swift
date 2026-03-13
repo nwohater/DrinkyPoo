@@ -1,61 +1,39 @@
-//
-//  ContentView.swift
-//  DrinkyPoo
-//
-//  Created by Brandon Lackey on 3/13/26.
-//
-
 import SwiftUI
 import SwiftData
 
+/// Root tab container.
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
+    var iCloudAvailable: Bool = true
+
+    @AppStorage("appearanceMode") private var appearanceMode: String = "system"
+
+    private var preferredColorScheme: ColorScheme? {
+        switch appearanceMode {
+        case "light": return .light
+        case "dark":  return .dark
+        default:      return nil
+        }
+    }
 
     var body: some View {
-        NavigationSplitView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
-                    }
-                }
-                .onDelete(perform: deleteItems)
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
-                }
-            }
-        } detail: {
-            Text("Select an item")
-        }
-    }
+        TabView {
+            NavigationStack { DashboardView() }
+                .tabItem { Label("Home",     systemImage: "house.fill") }
 
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
-    }
+            NavigationStack { CalendarView() }
+                .tabItem { Label("Calendar", systemImage: "calendar") }
 
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
-            }
+            NavigationStack { TrendsView() }
+                .tabItem { Label("Trends",   systemImage: "chart.bar.fill") }
+
+            NavigationStack { SettingsView() }
+                .tabItem { Label("Settings", systemImage: "gearshape.fill") }
         }
+        .preferredColorScheme(preferredColorScheme)
     }
 }
 
 #Preview {
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
+        .modelContainer(for: DayEntry.self, inMemory: true)
 }
