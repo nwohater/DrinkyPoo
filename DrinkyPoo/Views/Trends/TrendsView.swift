@@ -140,20 +140,33 @@ struct TrendsView: View {
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(Color("PrimaryText"))
             ForEach(Array(viewModel.topDryStreaks.enumerated()), id: \.element.id) { rank, streak in
-                HStack {
-                    Text("#\(rank + 1)")
-                        .font(.caption.monospacedDigit())
-                        .foregroundStyle(Color("SecondaryText"))
-                        .frame(width: 28, alignment: .leading)
-                    Text(streakDateRange(streak))
-                        .font(.caption)
-                        .foregroundStyle(Color("PrimaryText"))
-                    Spacer()
-                    Text("\(streak.length)d")
-                        .font(.caption.weight(.semibold).monospacedDigit())
-                        .foregroundStyle(Color("DryDayColor"))
-                }
+                streakRow(rank: rank, streak: streak, color: Color("DryDayColor"))
             }
+        }
+        if !viewModel.topDrinkingStreaks.isEmpty {
+            Divider()
+            Text("Longest Drinking Streaks")
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(Color("PrimaryText"))
+            ForEach(Array(viewModel.topDrinkingStreaks.enumerated()), id: \.element.id) { rank, streak in
+                streakRow(rank: rank, streak: streak, color: Color("DrinkingDayColor"))
+            }
+        }
+    }
+
+    private func streakRow(rank: Int, streak: Streak, color: Color) -> some View {
+        HStack {
+            Text("#\(rank + 1)")
+                .font(.caption.monospacedDigit())
+                .foregroundStyle(Color("SecondaryText"))
+                .frame(width: 28, alignment: .leading)
+            Text(streakDateRange(streak))
+                .font(.caption)
+                .foregroundStyle(Color("PrimaryText"))
+            Spacer()
+            Text("\(streak.length)d")
+                .font(.caption.weight(.semibold).monospacedDigit())
+                .foregroundStyle(color)
         }
     }
 

@@ -157,6 +157,11 @@ final class AppViewModel {
         Array(allDryStreaks.prefix(5))
     }
 
+    /// The top 5 longest drinking streaks in the current year.
+    var topDrinkingStreaks: [Streak] {
+        Array(buildStreaks(for: .drinking).sorted { $0.length > $1.length }.prefix(5))
+    }
+
     // MARK: - Helpers
 
     private func streakCount(for targetState: DayState) -> Int {
