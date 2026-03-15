@@ -4,7 +4,7 @@ struct GoalProgressView: View {
     let ytdDryPercent: Double
     let goalPercent: Double
     let dryCount: Int
-    let daysElapsed: Int
+    let loggedCount: Int
 
     private var progress: Double {
         min(ytdDryPercent / max(goalPercent, 1), 1.0)
@@ -45,7 +45,7 @@ struct GoalProgressView: View {
             }
             .frame(height: 12)
 
-            Text("\(dryCount) of \(daysElapsed) days dry this year (\(Int(goalPercent))% goal)")
+            Text("\(dryCount) of \(loggedCount) logged days dry this year (\(Int(goalPercent))% goal)")
                 .font(.caption)
                 .foregroundStyle(Color("SecondaryText"))
         }
@@ -60,9 +60,9 @@ struct GoalProgressView: View {
 
 #Preview {
     VStack(spacing: 20) {
-        GoalProgressView(ytdDryPercent: 62, goalPercent: 50, dryCount: 45, daysElapsed: 72)
-        GoalProgressView(ytdDryPercent: 43, goalPercent: 50, dryCount: 31, daysElapsed: 72)
-        GoalProgressView(ytdDryPercent: 30, goalPercent: 50, dryCount: 22, daysElapsed: 72)
+        GoalProgressView(ytdDryPercent: 62, goalPercent: 50, dryCount: 45, loggedCount: 72)
+        GoalProgressView(ytdDryPercent: 43, goalPercent: 50, dryCount: 31, loggedCount: 72)
+        GoalProgressView(ytdDryPercent: 30, goalPercent: 50, dryCount: 22, loggedCount: 72)
     }
     .padding()
     .background(Color("AppBackground"))

@@ -81,18 +81,11 @@ final class AppViewModel {
     /// (dry entries logged so far this calendar year) / (days elapsed in year) × 100
     var ytdDryPercent: Double {
         let cal = Calendar.current
-        let now = Date()
-        let year = cal.component(.year, from: now)
-        let startOfYear = cal.date(from: DateComponents(year: year, month: 1, day: 1))!
-        let today = cal.startOfDay(for: now)
-        // Days elapsed = Jan 1 through today, inclusive
-        let daysElapsed = cal.dateComponents([.day], from: startOfYear, to: cal.date(byAdding: .day, value: 1, to: today)!).day ?? 1
-
-        let dryCount = entries.filter { entry in
-            cal.component(.year, from: entry.date) == year && entry.state == .dry
-        }.count
-
-        return Double(dryCount) / Double(max(daysElapsed, 1)) * 100
+        let year = cal.component(.year, from: Date())
+        let ytd = entries.filter { cal.component(.year, from: $0.date) == year }
+        let dryCount = ytd.filter { $0.state == .dry }.count
+        let total = ytd.count
+        return total > 0 ? Double(dryCount) / Double(total) * 100 : 0
     }
 
     /// ytdDryPercent / goalPercent, clamped to 0...1.
@@ -107,6 +100,12 @@ final class AppViewModel {
         return entries.filter {
             cal.component(.year, from: $0.date) == year && $0.state == .dry
         }.count
+    }
+
+    var ytdLoggedCount: Int {
+        let cal = Calendar.current
+        let year = cal.component(.year, from: Date())
+        return entries.filter { cal.component(.year, from: $0.date) == year }.count
     }
 
     /// Number of days elapsed in the current calendar year (Jan 1 through today, inclusive).

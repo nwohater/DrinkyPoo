@@ -64,7 +64,7 @@ struct DashboardView: View {
                     ytdDryPercent: viewModel.ytdDryPercent,
                     goalPercent: goalPercent,
                     dryCount: viewModel.ytdDryCount,
-                    daysElapsed: viewModel.daysElapsedInYear
+                    loggedCount: viewModel.ytdLoggedCount
                 )
                 .padding(.horizontal)
 
