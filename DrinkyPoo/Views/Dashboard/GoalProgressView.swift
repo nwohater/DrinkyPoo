@@ -7,7 +7,7 @@ struct GoalProgressView: View {
     let loggedCount: Int
 
     private var progress: Double {
-        min(ytdDryPercent / max(goalPercent, 1), 1.0)
+        min(ytdDryPercent / 100, 1.0)
     }
 
     private var barColor: Color {
