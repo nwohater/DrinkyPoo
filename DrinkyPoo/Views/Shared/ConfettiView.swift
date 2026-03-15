@@ -133,6 +133,8 @@ func checkDryMilestone(entries: [DayEntry]) {
     updated.insert(milestone)
     UserDefaults.standard.set(updated.map(String.init).joined(separator: ","), forKey: key)
 
+    print("🎉 POSTING notification dryMilestoneReached")
     NotificationCenter.default.post(name: .dryMilestoneReached, object: nil)
+    print("🎉 POSTED notification")
     UINotificationFeedbackGenerator().notificationOccurred(.success)
 }

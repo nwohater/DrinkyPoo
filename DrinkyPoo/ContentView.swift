@@ -54,6 +54,7 @@ struct ContentView: View {
             }
         }
         .onReceive(NotificationCenter.default.publisher(for: .dryMilestoneReached)) { _ in
+            print("🎉 RECEIVED dryMilestoneReached in ContentView, setting showConfetti=true")
             showConfetti = true
             DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
                 showConfetti = false
