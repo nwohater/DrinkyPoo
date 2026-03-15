@@ -28,7 +28,7 @@ struct ConfettiView: UIViewRepresentable {
         override func layoutSubviews() {
             super.layoutSubviews()
             emitter.frame = bounds
-            let w = bounds.width > 0 ? bounds.width : UIScreen.main.bounds.width
+            let w = bounds.width > 0 ? bounds.width : window?.windowScene?.screen.bounds.width ?? 390
             emitter.emitterPosition = CGPoint(x: w / 2, y: -10)
             emitter.emitterSize = CGSize(width: w, height: 1)
             guard !didStart else { return }
