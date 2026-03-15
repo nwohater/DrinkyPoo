@@ -214,10 +214,13 @@ struct YearSummaryCard: View {
 /// bypassing SwiftUI's sheet mechanism which conflicts with UIActivityViewController.
 @MainActor
 func shareYearSummary(year: Int, entries: [DayEntry]) {
+    guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+          let root = scene.keyWindow?.rootViewController else { return }
+
     let card = YearSummaryCard(year: year, entries: entries)
         .environment(\.colorScheme, .light)
     let renderer = ImageRenderer(content: card)
-    renderer.scale = UIScreen.main.scale
+    renderer.scale = scene.screen.scale
     guard let image = renderer.uiImage else { return }
 
     // Save to a temp file with the desired filename so the share sheet uses it
@@ -226,9 +229,6 @@ func shareYearSummary(year: Int, entries: [DayEntry]) {
     if let data = image.pngData() { try? data.write(to: tempURL) }
 
     let activityVC = UIActivityViewController(activityItems: [tempURL], applicationActivities: nil)
-
-    guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-          let root = scene.keyWindow?.rootViewController else { return }
 
     var top = root
     while let presented = top.presentedViewController { top = presented }
