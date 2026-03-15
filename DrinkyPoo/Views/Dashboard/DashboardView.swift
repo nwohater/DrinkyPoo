@@ -170,7 +170,7 @@ struct DashboardView: View {
     private var thisMonthCard: some View {
         let stats   = viewModel.currentMonthStats
         let total   = stats.dry + stats.drinking
-        let pct     = total > 0 ? Int(Double(stats.dry) / Double(total) * 100) : 0
+        let pct     = total > 0 ? Int((Double(stats.dry) / Double(total) * 100).rounded()) : 0
         let needed  = viewModel.dryDaysNeededForGoal(goalPercent: goalPercent)
         let remaining = viewModel.daysRemainingInMonth
 
