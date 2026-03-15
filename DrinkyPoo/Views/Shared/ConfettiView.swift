@@ -120,7 +120,7 @@ func checkDryMilestone(entries: [DayEntry]) {
         return
     }
 
-    let key = "celebratedMilestones"
+    let key = "celebratedDryMilestones"
     let raw = UserDefaults.standard.string(forKey: key) ?? ""
     let celebrated = Set(raw.split(separator: ",").compactMap { Int($0) })
     print("🎉 Milestone \(milestone) hit! Already celebrated: \(celebrated)")
