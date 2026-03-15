@@ -1,12 +1,18 @@
 import SwiftUI
 import SwiftData
 
+// MARK: - Milestone notification
+extension Notification.Name {
+    static let dryMilestoneReached = Notification.Name("dryMilestoneReached")
+}
+
 /// Root tab container.
 struct ContentView: View {
     var iCloudAvailable: Bool = true
 
     @AppStorage("appearanceMode") private var appearanceMode: String = "system"
     @State private var showSplash = true
+    @State private var showConfetti = false
 
     private var preferredColorScheme: ColorScheme? {
         switch appearanceMode {
@@ -33,10 +39,23 @@ struct ContentView: View {
             }
             .preferredColorScheme(preferredColorScheme)
 
+            if showConfetti {
+                ConfettiView()
+                    .ignoresSafeArea()
+                    .allowsHitTesting(false)
+                    .zIndex(2)
+            }
+
             if showSplash {
                 SplashView()
                     .transition(.opacity)
-                    .zIndex(1)
+                    .zIndex(3)
+            }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .dryMilestoneReached)) { _ in
+            showConfetti = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+                showConfetti = false
             }
         }
         .task {

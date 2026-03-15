@@ -89,23 +89,38 @@ struct ConfettiView: UIViewRepresentable {
     }
 }
 
-// MARK: - Overlay modifier
-struct ConfettiModifier: ViewModifier {
-    @Binding var isActive: Bool
+// MARK: - Milestone check (call after any day is logged)
+@MainActor
+func checkDryMilestone(entries: [DayEntry]) {
+    // Compute current dry streak from the provided entries
+    let cal = Calendar.current
+    var date = cal.startOfDay(for: Date())
+    let lookup = Dictionary(uniqueKeysWithValues: entries.map { (cal.startOfDay(for: $0.date), $0.state) })
 
-    func body(content: Content) -> some View {
-        content.overlay {
-            if isActive {
-                ConfettiView()
-                    .ignoresSafeArea()
-                    .allowsHitTesting(false)
-            }
-        }
+    if lookup[date] == nil {
+        guard let yesterday = cal.date(byAdding: .day, value: -1, to: date) else { return }
+        date = yesterday
     }
-}
 
-extension View {
-    func confetti(isActive: Binding<Bool>) -> some View {
-        modifier(ConfettiModifier(isActive: isActive))
+    var streak = 0
+    var cursor = date
+    while let state = lookup[cursor], state == .dry {
+        streak += 1
+        guard let prev = cal.date(byAdding: .day, value: -1, to: cursor) else { break }
+        cursor = prev
     }
+
+    guard let milestone = dryStreakMilestones.first(where: { $0 == streak }) else { return }
+
+    let key = "celebratedMilestones"
+    let raw = UserDefaults.standard.string(forKey: key) ?? ""
+    let celebrated = Set(raw.split(separator: ",").compactMap { Int($0) })
+    guard !celebrated.contains(milestone) else { return }
+
+    var updated = celebrated
+    updated.insert(milestone)
+    UserDefaults.standard.set(updated.map(String.init).joined(separator: ","), forKey: key)
+
+    NotificationCenter.default.post(name: .dryMilestoneReached, object: nil)
+    UINotificationFeedbackGenerator().notificationOccurred(.success)
 }

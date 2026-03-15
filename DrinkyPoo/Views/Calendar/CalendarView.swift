@@ -45,6 +45,9 @@ struct CalendarView: View {
         }
         .background(Color("AppBackground").ignoresSafeArea())
         .navigationTitle("Calendar")
+        .onChange(of: entries) { _, newEntries in
+            checkDryMilestone(entries: newEntries)
+        }
         .sheet(item: $editDay) { item in
             let key = Calendar.current.startOfDay(for: item.date)
             DayEditSheet(
