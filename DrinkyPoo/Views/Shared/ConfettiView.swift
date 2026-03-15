@@ -46,7 +46,6 @@ struct ConfettiView: UIViewRepresentable {
                 .systemYellow, .systemPurple, .systemOrange, .white
             ]
             emitter.emitterShape = .line
-            emitter.beginTime = CACurrentMediaTime()
             emitter.birthRate = 1
             emitter.emitterCells = colors.flatMap { color in
                 [makeCell(color: color, shape: .circle),
@@ -122,7 +121,7 @@ func checkDryMilestone(entries: [DayEntry]) {
         return
     }
 
-    let key = "celebratedDryMilestones_v3"
+    let key = "celebratedDryMilestones_v4"
     let raw = UserDefaults.standard.string(forKey: key) ?? ""
     let celebrated = Set(raw.split(separator: ",").compactMap { Int($0) })
     print("🎉 Milestone \(milestone) hit! Already celebrated: \(celebrated)")
