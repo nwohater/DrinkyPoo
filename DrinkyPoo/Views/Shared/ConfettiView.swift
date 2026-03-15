@@ -27,14 +27,12 @@ struct ConfettiView: UIViewRepresentable {
 
         override func layoutSubviews() {
             super.layoutSubviews()
-            print("🎉 ConfettiUIView.layoutSubviews bounds=\(bounds)")
             emitter.frame = bounds
             let w = bounds.width > 0 ? bounds.width : UIScreen.main.bounds.width
             emitter.emitterPosition = CGPoint(x: w / 2, y: -10)
             emitter.emitterSize = CGSize(width: w, height: 1)
             guard !didStart else { return }
             didStart = true
-            print("🎉 startEmitting w=\(w)")
             startEmitting()
         }
 
@@ -114,28 +112,17 @@ func checkDryMilestone(entries: [DayEntry]) {
         cursor = prev
     }
 
-    print("🎉 checkDryMilestone: streak=\(streak), milestones=\(dryStreakMilestones)")
+    guard let milestone = dryStreakMilestones.first(where: { $0 == streak }) else { return }
 
-    guard let milestone = dryStreakMilestones.first(where: { $0 == streak }) else {
-        print("🎉 No milestone match for streak \(streak)")
-        return
-    }
-
-    let key = "celebratedDryMilestones_v4"
+    let key = "celebratedDryMilestones"
     let raw = UserDefaults.standard.string(forKey: key) ?? ""
     let celebrated = Set(raw.split(separator: ",").compactMap { Int($0) })
-    print("🎉 Milestone \(milestone) hit! Already celebrated: \(celebrated)")
-    guard !celebrated.contains(milestone) else {
-        print("🎉 Already celebrated \(milestone), skipping")
-        return
-    }
+    guard !celebrated.contains(milestone) else { return }
 
     var updated = celebrated
     updated.insert(milestone)
     UserDefaults.standard.set(updated.map(String.init).joined(separator: ","), forKey: key)
 
-    print("🎉 POSTING notification dryMilestoneReached")
     NotificationCenter.default.post(name: .dryMilestoneReached, object: nil)
-    print("🎉 POSTED notification")
     UINotificationFeedbackGenerator().notificationOccurred(.success)
 }
