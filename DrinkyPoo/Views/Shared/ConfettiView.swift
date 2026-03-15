@@ -27,12 +27,14 @@ struct ConfettiView: UIViewRepresentable {
 
         override func layoutSubviews() {
             super.layoutSubviews()
+            print("🎉 ConfettiUIView.layoutSubviews bounds=\(bounds)")
             emitter.frame = bounds
             let w = bounds.width > 0 ? bounds.width : UIScreen.main.bounds.width
             emitter.emitterPosition = CGPoint(x: w / 2, y: -10)
             emitter.emitterSize = CGSize(width: w, height: 1)
             guard !didStart else { return }
             didStart = true
+            print("🎉 startEmitting w=\(w)")
             startEmitting()
         }
 
@@ -120,7 +122,7 @@ func checkDryMilestone(entries: [DayEntry]) {
         return
     }
 
-    let key = "celebratedDryMilestones_v2"
+    let key = "celebratedDryMilestones_v3"
     let raw = UserDefaults.standard.string(forKey: key) ?? ""
     let celebrated = Set(raw.split(separator: ",").compactMap { Int($0) })
     print("🎉 Milestone \(milestone) hit! Already celebrated: \(celebrated)")
