@@ -23,9 +23,8 @@ struct YearSummaryCard: View {
         totalLogged > 0 ? Double(totalDry) / Double(totalLogged) * 100 : 0
     }
 
-    private var longestDryStreak: Int {
-        longestStreak(for: .dry)
-    }
+    private var longestDryStreak: Int { longestStreak(for: .dry) }
+    private var longestDrinkingStreak: Int { longestStreak(for: .drinking) }
 
     private func monthlyStats(month: Int) -> (dry: Int, drinking: Int) {
         let e = yearEntries.filter { cal.component(.month, from: $0.date) == month }
@@ -91,7 +90,7 @@ struct YearSummaryCard: View {
                 Text("Drinky Poo")
                     .font(.headline)
                     .foregroundStyle(Color("PrimaryText"))
-                Text("\(year) Year in Review")
+                Text("\(String(year)) Year in Review")
                     .font(.subheadline)
                     .foregroundStyle(Color("SecondaryText"))
             }
@@ -125,13 +124,26 @@ struct YearSummaryCard: View {
 
     @ViewBuilder
     private var streakRow: some View {
-        if longestDryStreak > 0 {
-            HStack(spacing: 8) {
-                Image(systemName: "flame.fill")
-                    .foregroundStyle(Color("DryDayColor"))
-                Text("Longest dry streak: \(longestDryStreak) day\(longestDryStreak == 1 ? "" : "s")")
-                    .font(.subheadline)
-                    .foregroundStyle(Color("PrimaryText"))
+        if longestDryStreak > 0 || longestDrinkingStreak > 0 {
+            VStack(alignment: .leading, spacing: 6) {
+                if longestDryStreak > 0 {
+                    HStack(spacing: 8) {
+                        Image(systemName: "flame.fill")
+                            .foregroundStyle(Color("DryDayColor"))
+                        Text("Longest dry streak: \(longestDryStreak) day\(longestDryStreak == 1 ? "" : "s")")
+                            .font(.subheadline)
+                            .foregroundStyle(Color("PrimaryText"))
+                    }
+                }
+                if longestDrinkingStreak > 0 {
+                    HStack(spacing: 8) {
+                        Image(systemName: "drop.fill")
+                            .foregroundStyle(Color("DrinkingDayColor"))
+                        Text("Longest drinking streak: \(longestDrinkingStreak) day\(longestDrinkingStreak == 1 ? "" : "s")")
+                            .font(.subheadline)
+                            .foregroundStyle(Color("PrimaryText"))
+                    }
+                }
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 10)
@@ -196,25 +208,37 @@ struct YearSummaryCard: View {
     }
 }
 
-// MARK: - ActivityView
-
-struct ActivityView: UIViewControllerRepresentable {
-    let activityItems: [Any]
-
-    func makeUIViewController(context: Context) -> UIActivityViewController {
-        UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
-    }
-
-    func updateUIViewController(_ uvc: UIActivityViewController, context: Context) {}
-}
-
 // MARK: - Share helper
 
+/// Renders the year summary card and presents the system share sheet directly via UIKit,
+/// bypassing SwiftUI's sheet mechanism which conflicts with UIActivityViewController.
 @MainActor
-func renderYearSummary(year: Int, entries: [DayEntry]) -> UIImage? {
+func shareYearSummary(year: Int, entries: [DayEntry]) {
     let card = YearSummaryCard(year: year, entries: entries)
         .environment(\.colorScheme, .light)
     let renderer = ImageRenderer(content: card)
     renderer.scale = UIScreen.main.scale
-    return renderer.uiImage
+    guard let image = renderer.uiImage else { return }
+
+    // Save to a temp file with the desired filename so the share sheet uses it
+    let filename = "DP\(String(year)).png"
+    let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(filename)
+    if let data = image.pngData() { try? data.write(to: tempURL) }
+
+    let activityVC = UIActivityViewController(activityItems: [tempURL], applicationActivities: nil)
+
+    guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+          let root = scene.keyWindow?.rootViewController else { return }
+
+    var top = root
+    while let presented = top.presentedViewController { top = presented }
+
+    // iPad requires a source rect for the popover
+    if let popover = activityVC.popoverPresentationController {
+        popover.sourceView = top.view
+        popover.sourceRect = CGRect(x: top.view.bounds.midX, y: top.view.bounds.midY, width: 0, height: 0)
+        popover.permittedArrowDirections = []
+    }
+
+    top.present(activityVC, animated: true)
 }

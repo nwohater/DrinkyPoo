@@ -10,8 +10,6 @@ struct DashboardView: View {
 
     @State private var viewModel = AppViewModel()
     @State private var showFlipSheet = false
-    @State private var shareImage: UIImage?
-    @State private var showShareSheet = false
 
     private var todayEntry: DayEntry? { viewModel.entry(for: Date()) }
 
@@ -89,18 +87,10 @@ struct DashboardView: View {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
                     let year = Calendar.current.component(.year, from: Date())
-                    if let image = renderYearSummary(year: year, entries: entries) {
-                        shareImage = image
-                        showShareSheet = true
-                    }
+                    shareYearSummary(year: year, entries: Array(entries))
                 } label: {
                     Image(systemName: "square.and.arrow.up")
                 }
-            }
-        }
-        .sheet(isPresented: $showShareSheet) {
-            if let image = shareImage {
-                ActivityView(activityItems: [image])
             }
         }
         .onChange(of: entries) { _, newEntries in
@@ -278,6 +268,7 @@ struct DashboardView: View {
 
     private func logActionButton(label: String, state: DayState, icon: String) -> some View {
         Button {
+            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
             viewModel.upsertDay(state: state, context: modelContext)
         } label: {
             VStack(spacing: 6) {

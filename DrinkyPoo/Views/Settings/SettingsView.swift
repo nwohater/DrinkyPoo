@@ -14,8 +14,6 @@ struct SettingsView: View {
     @State private var reminderTime: Date = Date()
     @State private var showClearConfirm = false
     @State private var selectedShareYear: Int = Calendar.current.component(.year, from: Date())
-    @State private var shareImage: UIImage?
-    @State private var showShareSheet = false
 
     private var availableYears: [Int] {
         let cal = Calendar.current
@@ -37,11 +35,6 @@ struct SettingsView: View {
         .onAppear {
             syncReminderTime()
             if let first = availableYears.first { selectedShareYear = first }
-        }
-        .sheet(isPresented: $showShareSheet) {
-            if let image = shareImage {
-                ActivityView(activityItems: [image])
-            }
         }
         .confirmationDialog(
             "Clear All Data?",
@@ -132,10 +125,7 @@ struct SettingsView: View {
                 }
             }
             Button {
-                if let image = renderYearSummary(year: selectedShareYear, entries: Array(entries)) {
-                    shareImage = image
-                    showShareSheet = true
-                }
+                shareYearSummary(year: selectedShareYear, entries: Array(entries))
             } label: {
                 Label("Share Year Summary", systemImage: "square.and.arrow.up")
             }
@@ -149,8 +139,20 @@ struct SettingsView: View {
 
     // MARK: - Data
 
+    private var unloggedDaysThisYear: Int {
+        let cal = Calendar.current
+        let now = Date()
+        let year = cal.component(.year, from: now)
+        guard let startOfYear = cal.date(from: DateComponents(year: year, month: 1, day: 1)) else { return 0 }
+        let yesterday = cal.startOfDay(for: cal.date(byAdding: .day, value: -1, to: now)!)
+        let daysSinceJan1 = cal.dateComponents([.day], from: startOfYear, to: yesterday).day ?? 0
+        let totalPastDays = daysSinceJan1 + 1
+        let loggedCount = entries.filter { cal.component(.year, from: $0.date) == year }.count
+        return max(totalPastDays - loggedCount, 0)
+    }
+
     private var dataSection: some View {
-        Section("Data") {
+        Section {
             ShareLink(
                 item: csvString(),
                 preview: SharePreview(
@@ -168,6 +170,12 @@ struct SettingsView: View {
                 Label("Clear All Data", systemImage: "trash")
             }
             .disabled(entries.isEmpty)
+        } header: {
+            Text("Data")
+        } footer: {
+            if unloggedDaysThisYear > 0 {
+                Text("\(unloggedDaysThisYear) day\(unloggedDaysThisYear == 1 ? "" : "s") not yet logged this year.")
+            }
         }
     }
 

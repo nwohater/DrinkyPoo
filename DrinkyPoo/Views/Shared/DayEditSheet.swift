@@ -48,6 +48,7 @@ struct DayEditSheet: View {
     private func logButton(label: String, icon: String, color: Color, state: DayState) -> some View {
         let isCurrent = currentState == state
         return Button {
+            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
             onLog(state)
             dismiss()
         } label: {
