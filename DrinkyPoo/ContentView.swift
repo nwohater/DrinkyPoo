@@ -41,6 +41,7 @@ struct ContentView: View {
 
             if showConfetti {
                 ConfettiView()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .ignoresSafeArea()
                     .allowsHitTesting(false)
                     .zIndex(2)
