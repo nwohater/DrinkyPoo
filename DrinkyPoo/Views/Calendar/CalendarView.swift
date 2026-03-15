@@ -171,7 +171,7 @@ private struct MonthGridView: View {
             Grid(horizontalSpacing: 4, verticalSpacing: 4) {
                 // Weekday header row
                 GridRow {
-                    ForEach(weekdayHeaders, id: \.self) { symbol in
+                    ForEach(Array(weekdayHeaders.enumerated()), id: \.offset) { _, symbol in
                         Text(symbol)
                             .font(.caption2)
                             .fontWeight(.medium)

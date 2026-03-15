@@ -6,6 +6,7 @@ struct ContentView: View {
     var iCloudAvailable: Bool = true
 
     @AppStorage("appearanceMode") private var appearanceMode: String = "system"
+    @State private var showSplash = true
 
     private var preferredColorScheme: ColorScheme? {
         switch appearanceMode {
@@ -16,20 +17,49 @@ struct ContentView: View {
     }
 
     var body: some View {
-        TabView {
-            NavigationStack { DashboardView() }
-                .tabItem { Label("Home",     systemImage: "house.fill") }
+        ZStack {
+            TabView {
+                NavigationStack { DashboardView() }
+                    .tabItem { Label("Home",     systemImage: "house.fill") }
 
-            NavigationStack { CalendarView() }
-                .tabItem { Label("Calendar", systemImage: "calendar") }
+                NavigationStack { CalendarView() }
+                    .tabItem { Label("Calendar", systemImage: "calendar") }
 
-            NavigationStack { TrendsView() }
-                .tabItem { Label("Trends",   systemImage: "chart.bar.fill") }
+                NavigationStack { TrendsView() }
+                    .tabItem { Label("Trends",   systemImage: "chart.bar.fill") }
 
-            NavigationStack { SettingsView() }
-                .tabItem { Label("Settings", systemImage: "gearshape.fill") }
+                NavigationStack { SettingsView() }
+                    .tabItem { Label("Settings", systemImage: "gearshape.fill") }
+            }
+            .preferredColorScheme(preferredColorScheme)
+
+            if showSplash {
+                SplashView()
+                    .transition(.opacity)
+                    .zIndex(1)
+            }
         }
-        .preferredColorScheme(preferredColorScheme)
+        .task {
+            try? await Task.sleep(for: .seconds(2))
+            withAnimation(.easeOut(duration: 0.4)) {
+                showSplash = false
+            }
+        }
+    }
+}
+
+// MARK: - SplashView
+
+private struct SplashView: View {
+    var body: some View {
+        Color("AppBackground")
+            .ignoresSafeArea()
+            .overlay {
+                Image("LaunchIcon")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 180, height: 180)
+            }
     }
 }
 

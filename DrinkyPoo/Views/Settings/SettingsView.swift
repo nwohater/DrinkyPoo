@@ -13,18 +13,36 @@ struct SettingsView: View {
 
     @State private var reminderTime: Date = Date()
     @State private var showClearConfirm = false
+    @State private var selectedShareYear: Int = Calendar.current.component(.year, from: Date())
+    @State private var shareImage: UIImage?
+    @State private var showShareSheet = false
+
+    private var availableYears: [Int] {
+        let cal = Calendar.current
+        let years = Set(entries.map { cal.component(.year, from: $0.date) })
+        return years.sorted().reversed()
+    }
 
     var body: some View {
         Form {
             goalSection
             reminderSection
             appearanceSection
+            shareSection
             dataSection
         }
         .scrollContentBackground(.hidden)
         .background(Color("AppBackground").ignoresSafeArea())
         .navigationTitle("Settings")
-        .onAppear { syncReminderTime() }
+        .onAppear {
+            syncReminderTime()
+            if let first = availableYears.first { selectedShareYear = first }
+        }
+        .sheet(isPresented: $showShareSheet) {
+            if let image = shareImage {
+                ActivityView(activityItems: [image])
+            }
+        }
         .confirmationDialog(
             "Clear All Data?",
             isPresented: $showClearConfirm,
@@ -99,6 +117,33 @@ struct SettingsView: View {
                 Text("Dark").tag("dark")
             }
             .pickerStyle(.segmented)
+        }
+    }
+
+    // MARK: - Share
+
+    private var shareSection: some View {
+        Section {
+            if availableYears.count > 1 {
+                Picker("Year", selection: $selectedShareYear) {
+                    ForEach(availableYears, id: \.self) { year in
+                        Text(String(year)).tag(year)
+                    }
+                }
+            }
+            Button {
+                if let image = renderYearSummary(year: selectedShareYear, entries: Array(entries)) {
+                    shareImage = image
+                    showShareSheet = true
+                }
+            } label: {
+                Label("Share Year Summary", systemImage: "square.and.arrow.up")
+            }
+            .disabled(entries.isEmpty)
+        } header: {
+            Text("Summary")
+        } footer: {
+            Text("Share a visual summary of your year — great for tracking progress with a doctor or support group.")
         }
     }
 

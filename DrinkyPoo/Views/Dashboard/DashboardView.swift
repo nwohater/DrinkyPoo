@@ -3,12 +3,15 @@ import SwiftData
 
 struct DashboardView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.scenePhase) private var scenePhase
     @Query(sort: \DayEntry.date) private var entries: [DayEntry]
 
     @AppStorage("goalPercent") private var goalPercent: Double = 50.0
 
     @State private var viewModel = AppViewModel()
     @State private var showFlipSheet = false
+    @State private var shareImage: UIImage?
+    @State private var showShareSheet = false
 
     private var todayEntry: DayEntry? { viewModel.entry(for: Date()) }
 
@@ -16,18 +19,27 @@ struct DashboardView: View {
         ScrollView {
             VStack(spacing: 14) {
                 // MARK: Header
-                VStack(spacing: 0) {
-                    Image("AppLogo")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 120)
+                VStack(spacing: 8) {
+                    Text("Drinky Poo")
+                        .font(.system(size: 48, weight: .black, design: .rounded))
+                        .foregroundStyle(
+                            LinearGradient(
+                                colors: [
+                                    Color("DryDayColor"),
+                                    Color("DrinkingDayColor")
+                                ],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                        )
+                        .shadow(color: Color("DryDayColor").opacity(0.3), radius: 8, x: 0, y: 4)
+                    
                     Text(Date(), format: .dateTime.weekday(.wide).month(.wide).day())
                         .font(.subheadline)
                         .foregroundStyle(Color("SecondaryText"))
                 }
                 .padding(.horizontal)
-                .padding(.top, 4)
+                .padding(.top, 12)
 
                 // MARK: Stat cards
                 HStack(spacing: 12) {
@@ -73,9 +85,33 @@ struct DashboardView: View {
             }
         }
         .background(Color("AppBackground").ignoresSafeArea())
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    let year = Calendar.current.component(.year, from: Date())
+                    if let image = renderYearSummary(year: year, entries: entries) {
+                        shareImage = image
+                        showShareSheet = true
+                    }
+                } label: {
+                    Image(systemName: "square.and.arrow.up")
+                }
+            }
+        }
+        .sheet(isPresented: $showShareSheet) {
+            if let image = shareImage {
+                ActivityView(activityItems: [image])
+            }
+        }
         .onChange(of: entries) { _, newEntries in
             viewModel.update(entries: newEntries)
             viewModel.goalPercent = goalPercent
+        }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active {
+                viewModel.update(entries: entries)
+                viewModel.goalPercent = goalPercent
+            }
         }
         .onAppear {
             viewModel.update(entries: entries)

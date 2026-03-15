@@ -8,5 +8,14 @@
 	</array>
 	<key>NSUserNotificationUsageDescription</key>
 	<string>Drinky Poo sends a daily reminder to log whether today was a dry day or a drinking day.</string>
+	<key>UILaunchScreen</key>
+	<dict>
+		<key>UIColorName</key>
+		<string>AppBackground</string>
+		<key>UIImageName</key>
+		<string>LaunchIcon</string>
+		<key>UIImageRespectsSafeAreaInsets</key>
+		<true/>
+	</dict>
 </dict>
 </plist>
