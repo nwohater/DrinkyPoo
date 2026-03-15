@@ -113,12 +113,21 @@ func checkDryMilestone(entries: [DayEntry]) {
         cursor = prev
     }
 
-    guard let milestone = dryStreakMilestones.first(where: { $0 == streak }) else { return }
+    print("🎉 checkDryMilestone: streak=\(streak), milestones=\(dryStreakMilestones)")
+
+    guard let milestone = dryStreakMilestones.first(where: { $0 == streak }) else {
+        print("🎉 No milestone match for streak \(streak)")
+        return
+    }
 
     let key = "celebratedMilestones"
     let raw = UserDefaults.standard.string(forKey: key) ?? ""
     let celebrated = Set(raw.split(separator: ",").compactMap { Int($0) })
-    guard !celebrated.contains(milestone) else { return }
+    print("🎉 Milestone \(milestone) hit! Already celebrated: \(celebrated)")
+    guard !celebrated.contains(milestone) else {
+        print("🎉 Already celebrated \(milestone), skipping")
+        return
+    }
 
     var updated = celebrated
     updated.insert(milestone)
