@@ -10,6 +10,19 @@ struct DashboardView: View {
 
     @State private var viewModel = AppViewModel()
     @State private var showFlipSheet = false
+    @State private var showConfetti = false
+
+    @AppStorage("celebratedMilestones") private var celebratedMilestonesRaw: String = ""
+
+    private var celebratedMilestones: Set<Int> {
+        Set(celebratedMilestonesRaw.split(separator: ",").compactMap { Int($0) })
+    }
+
+    private func markCelebrated(_ milestone: Int) {
+        var set = celebratedMilestones
+        set.insert(milestone)
+        celebratedMilestonesRaw = set.map(String.init).joined(separator: ",")
+    }
 
     private var todayEntry: DayEntry? { viewModel.entry(for: Date()) }
 
@@ -83,6 +96,7 @@ struct DashboardView: View {
             }
         }
         .background(Color("AppBackground").ignoresSafeArea())
+        .confetti(isActive: $showConfetti)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
@@ -96,6 +110,7 @@ struct DashboardView: View {
         .onChange(of: entries) { _, newEntries in
             viewModel.update(entries: newEntries)
             viewModel.goalPercent = goalPercent
+            checkMilestone()
         }
         .onChange(of: scenePhase) { _, phase in
             if phase == .active {
@@ -263,6 +278,18 @@ struct DashboardView: View {
                 logActionButton(label: "Dry Day", state: .dry, icon: "sun.max.fill")
                 logActionButton(label: "Drinking", state: .drinking, icon: "drop.fill")
             }
+        }
+    }
+
+    private func checkMilestone() {
+        let streak = viewModel.currentDryStreak
+        guard let milestone = dryStreakMilestones.first(where: { $0 == streak }),
+              !celebratedMilestones.contains(milestone) else { return }
+        markCelebrated(milestone)
+        showConfetti = true
+        UINotificationFeedbackGenerator().notificationOccurred(.success)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+            showConfetti = false
         }
     }
 
