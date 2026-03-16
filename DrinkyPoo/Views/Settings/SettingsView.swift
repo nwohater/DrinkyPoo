@@ -29,6 +29,7 @@ struct SettingsView: View {
             appearanceSection
             shareSection
             dataSection
+            infoSection
         }
         .scrollContentBackground(.hidden)
         .background(Color("AppBackground").ignoresSafeArea())
@@ -178,6 +179,16 @@ struct SettingsView: View {
         } footer: {
             if unloggedDaysThisYear > 0 {
                 Text("\(unloggedDaysThisYear) day\(unloggedDaysThisYear == 1 ? "" : "s") not yet logged this year.")
+            }
+        }
+    }
+
+    // MARK: - Info
+
+    private var infoSection: some View {
+        Section {
+            NavigationLink(destination: InfoView()) {
+                Label("Help & Info", systemImage: "info.circle")
             }
         }
     }
