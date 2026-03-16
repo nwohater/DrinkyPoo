@@ -40,32 +40,23 @@ struct DashboardView: View {
                 .padding(.horizontal)
                 .padding(.top, 12)
 
-                // MARK: Stat cards (2×2 grid)
-                VStack(spacing: 12) {
-                    HStack(spacing: 12) {
-                        StatCardView(
-                            title: "Dry Streak",
-                            value: "\(viewModel.currentDryStreak)",
-                            icon: "flame.fill"
-                        )
-                        StatCardView(
-                            title: "Drink Streak",
-                            value: "\(viewModel.currentDrinkingStreak)",
-                            icon: "drop.fill"
-                        )
-                    }
-                    HStack(spacing: 12) {
-                        StatCardView(
-                            title: "YTD Dry",
-                            value: String(format: "%.0f%%", viewModel.ytdDryPercent),
-                            icon: "chart.pie.fill"
-                        )
-                        StatCardView(
-                            title: "Best Streak",
-                            value: "\(viewModel.longestEverDryStreak)",
-                            icon: "trophy.fill"
-                        )
-                    }
+                // MARK: Stat cards
+                HStack(spacing: 12) {
+                    StatCardView(
+                        title: "Dry Streak",
+                        value: "\(viewModel.currentDryStreak)",
+                        icon: "flame.fill"
+                    )
+                    StatCardView(
+                        title: "Drink Streak",
+                        value: "\(viewModel.currentDrinkingStreak)",
+                        icon: "drop.fill"
+                    )
+                    StatCardView(
+                        title: "YTD Dry",
+                        value: String(format: "%.0f%%", viewModel.ytdDryPercent),
+                        icon: "chart.pie.fill"
+                    )
                 }
                 .padding(.horizontal)
 
