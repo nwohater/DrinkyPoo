@@ -124,5 +124,7 @@ func checkDryMilestone(entries: [DayEntry]) {
     UserDefaults.standard.set(updated.map(String.init).joined(separator: ","), forKey: key)
 
     NotificationCenter.default.post(name: .dryMilestoneReached, object: nil)
-    UINotificationFeedbackGenerator().notificationOccurred(.success)
+    if UserDefaults.standard.object(forKey: "hapticsEnabled") as? Bool != false {
+        UINotificationFeedbackGenerator().notificationOccurred(.success)
+    }
 }

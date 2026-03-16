@@ -194,6 +194,28 @@ final class AppViewModel {
         Array(buildStreaks(for: .drinking).sorted { $0.length > $1.length }.prefix(5))
     }
 
+    /// All-time longest dry streak across every logged day.
+    var longestEverDryStreak: Int {
+        guard !entries.isEmpty else { return 0 }
+        let cal = Calendar.current
+        let lookup = entryLookup
+        let dates = entries.map { cal.startOfDay(for: $0.date) }.sorted()
+        guard let first = dates.first else { return 0 }
+        let last = cal.startOfDay(for: Date())
+        var best = 0, current = 0, date = first
+        while date <= last {
+            if lookup[date] == .dry {
+                current += 1
+                best = max(best, current)
+            } else {
+                current = 0
+            }
+            guard let next = cal.date(byAdding: .day, value: 1, to: date) else { break }
+            date = next
+        }
+        return best
+    }
+
     // MARK: - Helpers
 
     private func streakCount(for targetState: DayState) -> Int {

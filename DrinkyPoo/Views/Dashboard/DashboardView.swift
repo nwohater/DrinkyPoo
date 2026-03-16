@@ -6,7 +6,8 @@ struct DashboardView: View {
     @Environment(\.scenePhase) private var scenePhase
     @Query(sort: \DayEntry.date) private var entries: [DayEntry]
 
-    @AppStorage("goalPercent") private var goalPercent: Double = 50.0
+    @AppStorage("goalPercent")    private var goalPercent: Double = 50.0
+    @AppStorage("hapticsEnabled") private var hapticsEnabled: Bool = true
 
     @State private var viewModel = AppViewModel()
     @State private var showFlipSheet = false
@@ -39,23 +40,32 @@ struct DashboardView: View {
                 .padding(.horizontal)
                 .padding(.top, 12)
 
-                // MARK: Stat cards
-                HStack(spacing: 12) {
-                    StatCardView(
-                        title: "Dry Streak",
-                        value: "\(viewModel.currentDryStreak)",
-                        icon: "flame.fill"
-                    )
-                    StatCardView(
-                        title: "Drink Streak",
-                        value: "\(viewModel.currentDrinkingStreak)",
-                        icon: "drop.fill"
-                    )
-                    StatCardView(
-                        title: "YTD Dry",
-                        value: String(format: "%.0f%%", viewModel.ytdDryPercent),
-                        icon: "chart.pie.fill"
-                    )
+                // MARK: Stat cards (2×2 grid)
+                VStack(spacing: 12) {
+                    HStack(spacing: 12) {
+                        StatCardView(
+                            title: "Dry Streak",
+                            value: "\(viewModel.currentDryStreak)",
+                            icon: "flame.fill"
+                        )
+                        StatCardView(
+                            title: "Drink Streak",
+                            value: "\(viewModel.currentDrinkingStreak)",
+                            icon: "drop.fill"
+                        )
+                    }
+                    HStack(spacing: 12) {
+                        StatCardView(
+                            title: "YTD Dry",
+                            value: String(format: "%.0f%%", viewModel.ytdDryPercent),
+                            icon: "chart.pie.fill"
+                        )
+                        StatCardView(
+                            title: "Best Streak",
+                            value: "\(viewModel.longestEverDryStreak)",
+                            icon: "trophy.fill"
+                        )
+                    }
                 }
                 .padding(.horizontal)
 
@@ -270,7 +280,7 @@ struct DashboardView: View {
 
     private func logActionButton(label: String, state: DayState, icon: String) -> some View {
         Button {
-            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+            if hapticsEnabled { UIImpactFeedbackGenerator(style: .medium).impactOccurred() }
             viewModel.upsertDay(state: state, context: modelContext)
         } label: {
             VStack(spacing: 6) {

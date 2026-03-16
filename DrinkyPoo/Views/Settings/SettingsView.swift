@@ -6,7 +6,8 @@ struct SettingsView: View {
     @AppStorage("reminderEnabled") private var reminderEnabled: Bool = false
     @AppStorage("reminderHour")   private var reminderHour: Int = 21
     @AppStorage("reminderMinute") private var reminderMinute: Int = 0
-    @AppStorage("appearanceMode") private var appearanceMode: String = "system"
+    @AppStorage("appearanceMode")  private var appearanceMode: String = "system"
+    @AppStorage("hapticsEnabled")  private var hapticsEnabled: Bool = true
 
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \DayEntry.date) private var entries: [DayEntry]
@@ -110,6 +111,8 @@ struct SettingsView: View {
                 Text("Dark").tag("dark")
             }
             .pickerStyle(.segmented)
+            Toggle("Haptic Feedback", isOn: $hapticsEnabled)
+                .tint(Color("AccentBlue"))
         }
     }
 
