@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 
 struct InfoView: View {
     private var appVersion: String {
