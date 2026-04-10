@@ -6,7 +6,36 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		79E46BAD2F89323100767ED3 /* DrinkyPooWatch Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 79E46BA32F89323000767ED3 /* DrinkyPooWatch Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		79E46BAB2F89323100767ED3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CF96944C2F647D3600A93245 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 79E46BA22F89323000767ED3;
+			remoteInfo = "DrinkyPooWatch Watch App";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		79E46BAE2F89323100767ED3 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				79E46BAD2F89323100767ED3 /* DrinkyPooWatch Watch App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		79E46BA32F89323000767ED3 /* DrinkyPooWatch Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "DrinkyPooWatch Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF9694542F647D3600A93245 /* DrinkyPoo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DrinkyPoo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -21,6 +50,21 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		79E46BA42F89323000767ED3 /* DrinkyPooWatch Watch App */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "DrinkyPooWatch Watch App";
+			sourceTree = "<group>";
+		};
+		79E46BB22F893C6E00767ED3 /* DrinkyPoo/Models */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = DrinkyPoo/Models;
+			sourceTree = "<group>";
+		};
+		79E46BB32F893C7600767ED3 /* DrinkyPoo/Shared */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = DrinkyPoo/Shared;
+			sourceTree = "<group>";
+		};
 		CF9694562F647D3600A93245 /* DrinkyPoo */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -32,6 +76,13 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		79E46BA02F89323000767ED3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CF9694512F647D3600A93245 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -46,6 +97,9 @@
 			isa = PBXGroup;
 			children = (
 				CF9694562F647D3600A93245 /* DrinkyPoo */,
+				79E46BA42F89323000767ED3 /* DrinkyPooWatch Watch App */,
+				79E46BB22F893C6E00767ED3 /* DrinkyPoo/Models */,
+				79E46BB32F893C7600767ED3 /* DrinkyPoo/Shared */,
 				CF9694552F647D3600A93245 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -54,6 +108,7 @@
 			isa = PBXGroup;
 			children = (
 				CF9694542F647D3600A93245 /* DrinkyPoo.app */,
+				79E46BA32F89323000767ED3 /* DrinkyPooWatch Watch App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -61,6 +116,30 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		79E46BA22F89323000767ED3 /* DrinkyPooWatch Watch App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 79E46BB12F89323100767ED3 /* Build configuration list for PBXNativeTarget "DrinkyPooWatch Watch App" */;
+			buildPhases = (
+				79E46B9F2F89323000767ED3 /* Sources */,
+				79E46BA02F89323000767ED3 /* Frameworks */,
+				79E46BA12F89323000767ED3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				79E46BA42F89323000767ED3 /* DrinkyPooWatch Watch App */,
+				79E46BB22F893C6E00767ED3 /* DrinkyPoo/Models */,
+				79E46BB32F893C7600767ED3 /* DrinkyPoo/Shared */,
+			);
+			name = "DrinkyPooWatch Watch App";
+			packageProductDependencies = (
+			);
+			productName = "DrinkyPooWatch Watch App";
+			productReference = 79E46BA32F89323000767ED3 /* DrinkyPooWatch Watch App.app */;
+			productType = "com.apple.product-type.application";
+		};
 		CF9694532F647D3600A93245 /* DrinkyPoo */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = CF9694622F647D3600A93245 /* Build configuration list for PBXNativeTarget "DrinkyPoo" */;
@@ -68,10 +147,12 @@
 				CF9694502F647D3600A93245 /* Sources */,
 				CF9694512F647D3600A93245 /* Frameworks */,
 				CF9694522F647D3600A93245 /* Resources */,
+				79E46BAE2F89323100767ED3 /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				79E46BAC2F89323100767ED3 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				CF9694562F647D3600A93245 /* DrinkyPoo */,
@@ -90,9 +171,13 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 2630;
+				LastSwiftUpdateCheck = 2640;
 				LastUpgradeCheck = 2630;
 				TargetAttributes = {
+					79E46BA22F89323000767ED3 = {
+						CreatedOnToolsVersion = 26.4;
+						LastSwiftMigration = 2640;
+					};
 					CF9694532F647D3600A93245 = {
 						CreatedOnToolsVersion = 26.3;
 					};
@@ -113,11 +198,19 @@
 			projectRoot = "";
 			targets = (
 				CF9694532F647D3600A93245 /* DrinkyPoo */,
+				79E46BA22F89323000767ED3 /* DrinkyPooWatch Watch App */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		79E46BA12F89323000767ED3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CF9694522F647D3600A93245 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -128,6 +221,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		79E46B9F2F89323000767ED3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CF9694502F647D3600A93245 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -137,7 +237,92 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		79E46BAC2F89323100767ED3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 79E46BA22F89323000767ED3 /* DrinkyPooWatch Watch App */;
+			targetProxy = 79E46BAB2F89323100767ED3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		79E46BAF2F89323100767ED3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = "DrinkyPooWatch Watch App/DrinkyPooWatch Watch App.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 17;
+				DEVELOPMENT_TEAM = 863L77DKWJ;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = DrinkyPooWatch;
+				INFOPLIST_KEY_CFBundleIconName = AppIcon;
+				INFOPLIST_KEY_UIBackgroundModes = "remote-notification";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.golackey.DrinkyPoo;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.golackey.DrinkyPoo.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "DrinkyPooWatch Watch App/DrinkyPooWatch Watch App-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 11.6;
+			};
+			name = Debug;
+		};
+		79E46BB02F89323100767ED3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = "DrinkyPooWatch Watch App/DrinkyPooWatch Watch App.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 17;
+				DEVELOPMENT_TEAM = 863L77DKWJ;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = DrinkyPooWatch;
+				INFOPLIST_KEY_CFBundleIconName = AppIcon;
+				INFOPLIST_KEY_UIBackgroundModes = "remote-notification";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.golackey.DrinkyPoo;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.golackey.DrinkyPoo.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "DrinkyPooWatch Watch App/DrinkyPooWatch Watch App-Bridging-Header.h";
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 11.6;
+			};
+			name = Release;
+		};
 		CF9694632F647D3600A93245 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -145,7 +330,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = DrinkyPoo/DrinkyPoo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 17;
 				DEVELOPMENT_TEAM = 863L77DKWJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -157,11 +342,12 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.golackey.DrinkyPoo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -181,7 +367,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = DrinkyPoo/DrinkyPoo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 17;
 				DEVELOPMENT_TEAM = 863L77DKWJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -193,11 +379,12 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.golackey.DrinkyPoo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -334,6 +521,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		79E46BB12F89323100767ED3 /* Build configuration list for PBXNativeTarget "DrinkyPooWatch Watch App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				79E46BAF2F89323100767ED3 /* Debug */,
+				79E46BB02F89323100767ED3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		CF96944F2F647D3600A93245 /* Build configuration list for PBXProject "DrinkyPoo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
